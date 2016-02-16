@@ -13,7 +13,7 @@ public class Reverser {
 			return Reverse(num / 10);
 
 		} else {
-			// breaks recursion and exits the function when there are no more
+			// base case: breaks recursion and exits the function when there are no more
 			// digits in the number
 			return 0;
 		}
