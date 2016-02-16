@@ -9,8 +9,7 @@ import java.util.Scanner;
  */
 public class DateCalc {
 
-	// *************************FUNCTION
-	// PROTOTYPES*******************************//
+	// **********FUNCTION PROTOTYPES*******************************//
 
 	// Function getDate is designed to allow the user to input certain values
 	// for dates, and accepts four arguments. the first argument is of type
