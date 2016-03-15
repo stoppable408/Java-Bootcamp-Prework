@@ -9,37 +9,6 @@ import java.util.Scanner;
  */
 public class DateCalc {
 
-	// **********FUNCTION PROTOTYPES*******************************//
-
-	// Function getDate is designed to allow the user to input certain values
-	// for dates, and accepts four arguments. the first argument is of type
-	// Scanner, and moves the input from the main function, into the getDate
-	// function. The second argument is of type string, and allows for the
-	// substitution of words in the output, so
-	// running the function with the input as "start year" changes the output to
-	// "Enter start year: ".
-	// the two integer arguments set a limit on acceptable values. it will
-	// reject items greater than maxRange or less than then minRange, putting
-	// the user in a do-while loop to retrieve an acceptable value
-	static int getDate(Scanner input, String name, int minRange, int maxRange) {
-
-		System.out.print("Enter " + name + ": ");
-		int date = input.nextInt();
-		if ((date < minRange) || (date > maxRange)) {
-			do {
-				System.out.print("Invalid entry, please enter a value between " + minRange + " and " + maxRange + ": ");
-				date = input.nextInt();
-			} while ((date > maxRange) || (date < minRange));
-
-		} else {
-
-			return date;
-		}
-
-		return date;
-
-	}
-
 	// Function monthName is designed to change month numbers into their name
 	// equivalent, it accepts as input an integer number that represents the
 	// number of the month, and returns, as output, a String representing the
@@ -120,81 +89,194 @@ public class DateCalc {
 
 	// ******MAIN FUNCTION***////
 	public static void main(String[] args) {
-		Scanner input = new Scanner(System.in);
-		boolean twentyeight = false;
-		boolean twentynine = false;
-		boolean thirty = false;
-		boolean leapyear = false;
-		int startDay, startMonth, startYear, endDay, endYear, endMonth;
 
-		// prompting user to enter the start year
-		startYear = getDate(input, "start year", 1, 9999);
-		// checks if the year is a leap year.
+		boolean leapyear = false, twentyeight = false, twentynine = false, thirty = false;
+
+		// Setting up the input for the start date.
+		Scanner number = new Scanner(System.in);
+		System.out.print("Enter start date (Format: MMDDYYYY): ");
+		String startDate = number.nextLine();
+
+		// changes the string 'startdate' into an array of characters
+		char[] integer = startDate.toCharArray();
+
+		// checks to see if the user has entered the appropriate number of
+		// characters. if not, it asks the user for the input again.
+		if (integer.length != 8) {
+			do {
+				System.out.println("Invalid Input. Please try again");
+				startDate = number.nextLine();
+				integer = startDate.toCharArray();
+			} while (integer.length != 8);
+		}
+
+		// creates an empty integer array that's the same length of the
+		// character array, then proceeds to use a for loop to populate the
+		// integer array with the integer equivalent of the characters from the
+		// character array.
+		int[] numspace = new int[startDate.length()];
+		for (int i = 0; i < integer.length; i++) {
+			numspace[i] = startDate.charAt(i) - '0';
+		}
+
+		// Calculates the start Year, Month, and Day from the integer array and
+		// places them in a variable.
+		int startYear = ((numspace[4] * 1000) + (numspace[5] * 100) + (numspace[6] * 10) + numspace[7]);
+		int startMonth = ((numspace[0] * 10) + numspace[1]);
+		int startDay = ((numspace[2] * 10) + numspace[3]);
+
+		// Checks to see if the start year is a leap year.
 		if ((startYear % 4 == 0) && (startYear % 100 != 0)) {
 			leapyear = true;
 		}
 		if ((startYear % 4 == 0) && (startYear % 100 == 0) && (startYear % 400 == 0)) {
 			leapyear = true;
 		}
-		// prompting user to enter the start month
-		startMonth = getDate(input, "start month", 1, 12);
 
-		// the month has 29 days if it's February and a leap year
+		// Checks to make sure the year is greater than 1 and less than 9999. if
+		// not, it will ask the user for new input.
+		if ((startYear < 1) || (startYear > 9999)) {
+			Scanner year = new Scanner(System.in);
+			do {
+				System.out.print("Invalid Year. Please enter a value between 1 and 9999: ");
+				startYear = year.nextInt();
+			} while ((startYear < 1) || (startYear > 9999));
+			year.close();
+		}
+
+		// Checks to make sure the month is within the acceptable range of 1-12
+		if ((startMonth < 1) || (startMonth > 12)) {
+			Scanner month = new Scanner(System.in);
+			do {
+				System.out.print("Invalid Month. Please enter a value between 1 and 12: ");
+				startMonth = month.nextInt();
+			} while ((startMonth < 1) || (startMonth > 12));
+			month.close();
+		}
+
+		// Only allows certain days depending on the month, and whether or not
+		// it's a leap year.
 		if ((startMonth == 2) && (leapyear == true)) {
-			startDay = getDate(input, "start day", 1, 29);
 			twentynine = true;
+			if (startDay > 29) {
+				Scanner day = new Scanner(System.in);
+				do {
+					System.out.print(
+							"Invalid Date. February only has 29 days. Please choose a day that is less than 30:");
+					startDay = day.nextInt();
+				} while (startDay > 29);
+				day.close();
+			}
 		}
-		// the month has 28 days if it's February and not a leap year
+
 		else if ((startMonth == 2) && (leapyear == false)) {
-			startDay = getDate(input, "start day", 1, 28);
 			twentyeight = true;
-		}
-		// the month has 30 days if it's April, June, September, or November
-		else if (((startMonth == 4) || (startMonth == 6) || (startMonth == 9) || (startMonth == 11))) {
-			startDay = getDate(input, "start day", 1, 30);
+			if (startDay > 28) {
+				Scanner day = new Scanner(System.in);
+				do {
+					System.out.print(
+							"Invalid Date. February only has 28 days. Please choose a day that is less than 29:");
+					startDay = day.nextInt();
+				} while (startDay > 28);
+				day.close();
+			}
+		} else if (((startMonth == 4) || (startMonth == 6) || (startMonth == 9) || (startMonth == 11))) {
 			thirty = true;
+			if (startDay > 30) {
+				Scanner day = new Scanner(System.in);
+				do {
+					System.out.print(
+							"Invalid Date. this month only has 30 days. Please choose a day that is less than 31:");
+					startDay = day.nextInt();
+				} while (startDay > 30);
+				day.close();
+			}
 		}
-		// all other months have 31 days.
+
 		else {
-			startDay = getDate(input, "start day", 1, 31);
+			if (startDay > 31) {
+				Scanner day = new Scanner(System.in);
+				do {
+					System.out.print(
+							"Invalid Date. this month only has 31 days. Please choose a day that is less than 32:");
+					startDay = day.nextInt();
+				} while (startDay > 31);
+				day.close();
+			}
+
 		}
 
-		// prompting user to enter the end year
-		endYear = getDate(input, "end year", 1, 9999);
+		System.out.print("Enter end date (Format: MMDDYYYY): ");
+		String endDate = number.nextLine();
+		integer = endDate.toCharArray();
 
-		// prompting user to enter the end month
-		endMonth = getDate(input, "end month", 1, 12);
+		if (integer.length != 8) {
+			do {
+				System.out.println("Invalid Input. Please try again");
+				startDate = number.nextLine();
+				integer = endDate.toCharArray();
+			} while (integer.length != 8);
+		}
 
-		// the month has 29 days if it's February and a leap year
+		numspace = new int[endDate.length()];
+		for (int i = 0; i < integer.length; i++) {
+			numspace[i] = endDate.charAt(i) - '0';
+		}
+
+		int endYear = ((numspace[4] * 1000) + (numspace[5] * 100) + (numspace[6] * 10) + numspace[7]);
+		int endMonth = ((numspace[0] * 10) + numspace[1]);
+		int endDay = ((numspace[2] * 10) + numspace[3]);
+
 		if ((endMonth == 2) && (leapyear == true)) {
-			endDay = getDate(input, "end day", 1, 29);
 			twentynine = true;
+			if (endDay > 29) {
+				Scanner day = new Scanner(System.in);
+				do {
+					System.out.print(
+							"Invalid Date. February only has 29 days. Please choose a day that is less than 30:");
+					endDay = day.nextInt();
+				} while (endDay > 29);
+				day.close();
+			}
 		}
-		// the month has 28 days if it's February and not a leap year
+
 		else if ((endMonth == 2) && (leapyear == false)) {
-			endDay = getDate(input, "end day", 1, 28);
 			twentyeight = true;
+			if (endDay > 28) {
+				Scanner day = new Scanner(System.in);
+				do {
+					System.out.print(
+							"Invalid Date. February only has 28 days. Please choose a day that is less than 29:");
+					endDay = day.nextInt();
+				} while (endDay > 28);
+				day.close();
+			}
+		} else if (((endMonth == 4) || (endMonth == 6) || (endMonth == 9) || (endMonth == 11))) {
+			thirty = true;
+			if (endDay > 30) {
+				Scanner day = new Scanner(System.in);
+				do {
+					System.out.print(
+							"Invalid Date. this month only has 30 days. Please choose a day that is less than 31:");
+					endDay = day.nextInt();
+				} while (endDay > 30);
+				day.close();
+			}
 		}
-		// the month has 30 days if it's April, June, September, or November
-		else if ((endMonth == 4) || (endMonth == 6) || (endMonth == 9) || (endMonth == 11)) {
-			endDay = getDate(input, "end day", 1, 30);
-			if (endMonth < startMonth) {
-				thirty = true;
+
+		else {
+			if (endDay > 31) {
+				Scanner day = new Scanner(System.in);
+				do {
+					System.out.print(
+							"Invalid Date. this month only has 31 days. Please choose a day that is less than 32:");
+					endDay = day.nextInt();
+				} while (endDay > 31);
+				day.close();
 			}
 
 		}
-		// all other months have 31 days.
-		else {
-			endDay = getDate(input, "end day", 1, 31);
-			if (startMonth > endMonth) {
-				if (thirty == false) {
-					thirty = true;
-				} else {
-					thirty = false;
-				}
-			}
-		}
-		input.close();
+		number.close();
 		// subtracts the two dates from each other to get the total years, days
 		// and months
 		int yearTotal = endYear - startYear;
