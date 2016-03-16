@@ -156,6 +156,8 @@ public class DateCalc {
 
 		// Only allows certain days depending on the month, and whether or not
 		// it's a leap year.
+		// if the month is February, and it's a leap year, then the month can
+		// only have a maximum of 29 days.
 		if ((startMonth == 2) && (leapyear == true)) {
 			twentynine = true;
 			if (startDay > 29) {
@@ -169,6 +171,8 @@ public class DateCalc {
 			}
 		}
 
+		// if the month is February and it's not a leap year, the month has a
+		// maximum of 28 days.
 		else if ((startMonth == 2) && (leapyear == false)) {
 			twentyeight = true;
 			if (startDay > 28) {
@@ -180,7 +184,9 @@ public class DateCalc {
 				} while (startDay > 28);
 				day.close();
 			}
-		} else if (((startMonth == 4) || (startMonth == 6) || (startMonth == 9) || (startMonth == 11))) {
+		}
+		// if the month has 30 days, the maximum amount of days is 30.
+		else if (((startMonth == 4) || (startMonth == 6) || (startMonth == 9) || (startMonth == 11))) {
 			thirty = true;
 			if (startDay > 30) {
 				Scanner day = new Scanner(System.in);
@@ -193,6 +199,7 @@ public class DateCalc {
 			}
 		}
 
+		// otherwise, all other months have 31 days
 		else {
 			if (startDay > 31) {
 				Scanner day = new Scanner(System.in);
@@ -206,10 +213,12 @@ public class DateCalc {
 
 		}
 
+		// asking the user for input for the end date.
 		System.out.print("Enter end date (Format: MMDDYYYY): ");
 		String endDate = number.nextLine();
 		integer = endDate.toCharArray();
 
+		// if the end date is less than 8 characters, it's invalid.
 		if (integer.length != 8) {
 			do {
 				System.out.println("Invalid Input. Please try again");
@@ -218,14 +227,20 @@ public class DateCalc {
 			} while (integer.length != 8);
 		}
 
+		// populating an integer array with the items from the character array
 		numspace = new int[endDate.length()];
 		for (int i = 0; i < integer.length; i++) {
 			numspace[i] = endDate.charAt(i) - '0';
 		}
 
+		// calculates the end year, month, and day using the numbers from the
+		// array
 		int endYear = ((numspace[4] * 1000) + (numspace[5] * 100) + (numspace[6] * 10) + numspace[7]);
 		int endMonth = ((numspace[0] * 10) + numspace[1]);
 		int endDay = ((numspace[2] * 10) + numspace[3]);
+
+		// if the month is February, and it's a leap year, then the month can
+		// only have a maximum of 29 days.
 
 		if ((endMonth == 2) && (leapyear == true)) {
 			twentynine = true;
@@ -239,6 +254,8 @@ public class DateCalc {
 				day.close();
 			}
 		}
+		// if the month is February and it's not a leap year, the month has a
+		// maximum of 28 days.
 
 		else if ((endMonth == 2) && (leapyear == false)) {
 			twentyeight = true;
@@ -251,7 +268,10 @@ public class DateCalc {
 				} while (endDay > 28);
 				day.close();
 			}
-		} else if (((endMonth == 4) || (endMonth == 6) || (endMonth == 9) || (endMonth == 11))) {
+		}
+		// if the month has 30 days, the maximum amount of days is 30.
+
+		else if (((endMonth == 4) || (endMonth == 6) || (endMonth == 9) || (endMonth == 11))) {
 			thirty = true;
 			if (endDay > 30) {
 				Scanner day = new Scanner(System.in);
@@ -263,6 +283,7 @@ public class DateCalc {
 				day.close();
 			}
 		}
+		// otherwise, all other months have 31 days
 
 		else {
 			if (endDay > 31) {
@@ -276,6 +297,7 @@ public class DateCalc {
 			}
 
 		}
+
 		number.close();
 		// subtracts the two dates from each other to get the total years, days
 		// and months
