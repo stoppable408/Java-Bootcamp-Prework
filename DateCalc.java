@@ -311,7 +311,7 @@ public class DateCalc {
 			monthTotal -= 1;
 
 			boolean withinMonth = false;
-			if ((yearTotal == 0) && (monthTotal == 0)) {
+			if (monthTotal == 0) {
 				withinMonth = true;
 			}
 			// only adds 28 days if the month is February
